@@ -41,6 +41,30 @@ function renderPosts(posts){
       </div>
     </div>
   `;
- return col;
- 
+
+  col.querySelector('button').addEventListener('click', () => {
+    if (confirm('Delete this post?')) {      
+      deletePost(post.id) //api call
+        .then(() => {
+          col.remove(); // remove from UI
+        })
+        .catch(err => {
+          console.log(err);
+          alert('Failed to delete');
+        });
+
+    }
+  });
+ return col; 
+}
+function deletePost(id) {
+  return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    method: 'DELETE',
+  })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Delete failed');
+      }
+      return res;
+    });
 }
